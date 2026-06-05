@@ -1,0 +1,294 @@
+{
+  "info": {
+    "_postman_id": "8a414265-894d-46b3-adbd-a5dc94299f9f",
+    "name": "ServeRest — Testes de API",
+    "description": "### Welcome to Postman! This is your first collection. \n\nCollections are your starting point for building and testing APIs. You can use this one to:\n\n• Group related requests\n• Test your API in real-world scenarios\n• Document and share your requests\n\nUpdate the name and overview whenever you’re ready to make it yours.\n\n[Learn more about Postman Collections.](https://learning.postman.com/docs/collections/collections-overview/)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54811791",
+    "_collection_link": "https://go.postman.co/collection/54811791-8a414265-894d-46b3-adbd-a5dc94299f9f?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "GET Listar Usuários",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {",
+              "    pm.response.to.have.status(200);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "postman-echo.com/get",
+          "host": [
+            "postman-echo",
+            "com"
+          ],
+          "path": [
+            "get"
+          ]
+        },
+        "description": "This is a GET request and it is used to \"get\" data from an endpoint. There is no request body for a GET request, but you can use query parameters to help specify the resource you want data on (e.g., in this request, we have `id=1`).\n\nA successful GET response will have a `200 OK` status, and should include some kind of response body - for example, HTML web content or JSON data."
+      },
+      "response": []
+    },
+    {
+      "name": "POST Login — credenciais válidas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Testa se o status é 200\r",
+              "pm.test(\"Status 200 - Login realizado com sucesso\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Testa se retornou o token\r",
+              "pm.test(\"Token de autenticação presente\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property(\"authorization\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"fulano@qa.com\",\r\n  \"password\": \"teste\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://serverest.dev/login",
+          "protocol": "https",
+          "host": [
+            "serverest",
+            "dev"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Login — credenciais inválidas",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Testa se o status é 401\r",
+              "pm.test(\"Status 401 - Credenciais inválidas\", function () {\r",
+              "    pm.response.to.have.status(401);\r",
+              "});\r",
+              "\r",
+              "// Testa se a mensagem de erro está correta\r",
+              "pm.test(\"Mensagem de erro correta\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.message).to.eql(\"Email e/ou senha inválidos\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"fulano@qa.com\",\r\n  \"password\": \"senhaerrada\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://serverest.dev/login",
+          "protocol": "https",
+          "host": [
+            "serverest",
+            "dev"
+          ],
+          "path": [
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "POST Cadastrar Usuário",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Testa se o status é 201\r",
+              "pm.test(\"Status 201 - Cadastro realizado com sucesso\", function () {\r",
+              "    pm.response.to.have.status(201);\r",
+              "});\r",
+              "\r",
+              "// Testa se a mensagem está correta\r",
+              "pm.test(\"Mensagem de sucesso no body\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
+              "});\r",
+              "\r",
+              "// Salva o _id na variável de coleção para o GET usar\r",
+              "var jsonData = pm.response.json();\r",
+              "pm.collectionVariables.set(\"usuarioId\", jsonData._id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"nome\": \"Camila QA Teste\",\r\n  \"email\": \"camila.camila.api.2026@teste.com\",\r\n  \"password\": \"teste123\",\r\n  \"administrador\": \"true\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://serverest.dev/usuarios",
+          "protocol": "https",
+          "host": [
+            "serverest",
+            "dev"
+          ],
+          "path": [
+            "usuarios"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Buscar Usuário por ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Testa se o status é 200\r",
+              "pm.test(\"Status 200 - Usuário encontrado\", function () {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "\r",
+              "// Testa se retornou o ID correto\r",
+              "pm.test(\"ID do usuário está correto\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData._id).to.eql(pm.collectionVariables.get(\"usuarioId\"));\r",
+              "});\r",
+              "\r",
+              "// Testa se o nome está presente\r",
+              "pm.test(\"Campo nome está presente\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData).to.have.property(\"nome\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://serverest.dev/usuarios/{{usuarioId}}",
+          "protocol": "https",
+          "host": [
+            "serverest",
+            "dev"
+          ],
+          "path": [
+            "usuarios",
+            "{{usuarioId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET Buscar Usuário por ID — ID inválido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "// Testa se o status é 400\r",
+              "pm.test(\"Status 400 - Usuário não encontrado\", function () {\r",
+              "    pm.response.to.have.status(400);\r",
+              "});\r",
+              "\r",
+              "// Testa se a mensagem de erro está correta\r",
+              "pm.test(\"Mensagem de erro correta\", function () {\r",
+              "    var jsonData = pm.response.json();\r",
+              "    pm.expect(jsonData.message).to.eql(\"Usuário não encontrado\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://serverest.dev/usuarios/abcdefghijklmnop",
+          "protocol": "https",
+          "host": [
+            "serverest",
+            "dev"
+          ],
+          "path": [
+            "usuarios",
+            "abcdefghijklmnop"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "usuarioId",
+      "value": ""
+    }
+  ]
+}
