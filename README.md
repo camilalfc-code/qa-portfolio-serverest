@@ -78,7 +78,7 @@ ServeRest — Testes de API
 |----------------------|-----------------|-----------|------------|
 | 18 | 36 | 36 | 0 |
 
-> <img width="1917" height="982" alt="Captura de tela 2026-06-29 184430" src="https://github.com/user-attachments/assets/4706aa7e-1dc5-4b7e-b750-ddcaa340909b" />
+<img width="1917" height="982" alt="Captura de tela 2026-06-29 184430" src="https://github.com/user-attachments/assets/4706aa7e-1dc5-4b7e-b750-ddcaa340909b" />
 
 ---
 
