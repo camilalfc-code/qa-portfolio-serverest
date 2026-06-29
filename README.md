@@ -64,12 +64,15 @@ ServeRest — Testes de API
 ## ✅ Cobertura de testes — Usuários
 
 | # | Cenário (BDD) | Método | Status Esperado | Resultado |
-|---|---------------|--------|-----------------|-----------|
+|---|---|---|---|---|
 | 15 | **Dado** que existem usuários cadastrados<br>**Quando** realiza a listagem<br>**Então** deve receber status 200 e lista de usuários | GET | 200 | ✅ PASSED |
 | 16 | **Dado** que o usuário informa dados válidos<br>**Quando** realiza o cadastro<br>**Então** deve receber status 201 e mensagem de sucesso | POST | 201 | ✅ PASSED |
 | 17 | **Dado** que existe um usuário cadastrado<br>**Quando** busca pelo ID correto<br>**Então** deve receber status 200 e dados do usuário | GET | 200 | ✅ PASSED |
 | 18 | **Dado** que o ID informado não existe<br>**Quando** tenta buscar o usuário<br>**Então** deve receber status 400 e mensagem de erro | GET | 400 | ✅ PASSED |
-
+| 19 | **Dado** que o email já está cadastrado<br>**Quando** tenta cadastrar novamente<br>**Então** deve receber status 400 e mensagem "Este email já está sendo usado" | POST | 400 | ✅ PASSED |
+| 20 | **Dado** que os campos obrigatórios estão vazios<br>**Quando** tenta cadastrar usuário<br>**Então** deve receber status 400 com mensagens de campo obrigatório | POST | 400 | ✅ PASSED |
+| 21 | **Dado** que o usuário existe<br>**Quando** edita com dados válidos<br>**Então** deve receber status 200 e mensagem "Registro alterado com sucesso" | PUT | 200 | ✅ PASSED |
+| 22 | **Dado** que o usuário existe<br>**Quando** realiza o delete<br>**Então** deve receber status 200 ou 400 conforme comportamento da API pública | DELETE | 200/400 | ✅ PASSED |
 ---
 
 ## 📊 Resultado da execução
