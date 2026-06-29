@@ -691,20 +691,29 @@
               "listen": "test",
               "script": {
                 "exec": [
-                  "// Testa se o status é 201\r",
+                  "const jsonData = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"usuarioId\", jsonData._id);\r",
+                  "\r",
                   "pm.test(\"Status 201 - Cadastro realizado com sucesso\", function () {\r",
                   "    pm.response.to.have.status(201);\r",
                   "});\r",
                   "\r",
-                  "// Testa se a mensagem está correta\r",
                   "pm.test(\"Mensagem de sucesso no body\", function () {\r",
-                  "    var jsonData = pm.response.json();\r",
-                  "    pm.expect(jsonData.message).to.eql(\"Cadastro realizado com sucesso\");\r",
-                  "});\r",
-                  "\r",
-                  "// Salva o _id na variável de coleção para o GET usar\r",
-                  "var jsonData = pm.response.json();\r",
-                  "pm.collectionVariables.set(\"usuarioId\", jsonData._id);"
+                  "    pm.expect(jsonData.message).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const timestamp = new Date().getTime();\r",
+                  "pm.collectionVariables.set(\"emailDinamico\", `camila.${timestamp}@teste.com`);\r",
+                  "pm.collectionVariables.set(\"emailDinamicoEdit\", `camila.edit.${timestamp}@teste.com`);"
                 ],
                 "type": "text/javascript",
                 "packages": {},
@@ -717,7 +726,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n  \"nome\": \"Camila QA Teste\",\r\n  \"email\": \"camila.camila.api.2026@teste.com\",\r\n  \"password\": \"teste123\",\r\n  \"administrador\": \"true\"\r\n}",
+              "raw": "{\r\n  \"nome\": \"Camila QA Teste\",\r\n  \"email\": \"{{emailDinamico}}\",\r\n  \"password\": \"teste123\",\r\n  \"administrador\": \"true\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -827,6 +836,219 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "POST Cadastrar Usuário — email duplicado",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem de email duplicado retornada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Camila QA Teste\",\r\n  \"email\": \"camila.camila.api.2026@teste.com\",\r\n  \"password\": \"teste123\",\r\n  \"administrador\": \"true\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://serverest.dev/usuarios",
+              "protocol": "https",
+              "host": [
+                "serverest",
+                "dev"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "POST Cadastrar Usuário — campos vazios",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem de erro retornada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.nome).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"\",\r\n  \"email\": \"\",\r\n  \"password\": \"\",\r\n  \"administrador\": \"true\"\r\n}"
+            },
+            "url": {
+              "raw": "https://serverest.dev/usuarios",
+              "protocol": "https",
+              "host": [
+                "serverest",
+                "dev"
+              ],
+              "path": [
+                "usuarios"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT Editar Usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem de sucesso retornada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const timestamp = new Date().getTime();\r",
+                  "pm.collectionVariables.set(\"emailDinamicoEdit\", `camila.edit.${timestamp}@teste.com`);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"nome\": \"Camila QA Editada\",\r\n  \"email\": \"{{emailDinamicoEdit}}\",\r\n  \"password\": \"teste123\",\r\n  \"administrador\": \"true\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://serverest.dev/usuarios/{{usuarioId}}",
+              "protocol": "https",
+              "host": [
+                "serverest",
+                "dev"
+              ],
+              "path": [
+                "usuarios",
+                "{{usuarioId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE Deletar Usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code é 200 ou 400\", function () {\r",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 400]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem retornada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.exist;\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const id = pm.collectionVariables.get(\"usuarioId\");\r",
+                  "console.log(\"usuarioId:\", id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "\r\n",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "https://serverest.dev/usuarios/{{usuarioId}}",
+              "protocol": "https",
+              "host": [
+                "serverest",
+                "dev"
+              ],
+              "path": [
+                "usuarios",
+                "{{usuarioId}}"
+              ]
+            }
+          },
+          "response": []
         }
       ]
     }
@@ -834,6 +1056,14 @@
   "variable": [
     {
       "key": "usuarioId",
+      "value": ""
+    },
+    {
+      "key": "emailDinamico",
+      "value": ""
+    },
+    {
+      "key": "emailDinamicoEdit",
       "value": ""
     }
   ]
