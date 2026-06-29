@@ -104,6 +104,16 @@ Durante a execução dos testes, foram identificados comportamentos relevantes p
 
 ---
 
+## 🐛 Bug Reports
+
+Durante a execução dos testes foram identificados e documentados bugs reais na API:
+
+| ID | Título | Severidade | Status |
+|---|---|---|---|
+| [BUG-001](./bug-reports/BUG-001-serverest-mensagem-email-invalido.md) | Mensagem de erro incorreta para email inválido no login | Baixa | Aberto |
+| [BUG-002](./bug-reports/BUG-002-serverest-status-code-senha-incorreta.md) | Status code incorreto para senha incorreta no login | Média | Aberto |
+
+
 ## 🛠️ Tecnologias utilizadas
 
 - Postman
